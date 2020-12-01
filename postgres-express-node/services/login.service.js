@@ -6,13 +6,6 @@ class LoginService {
     this.logger = logger;
   }
 
-  async getUser(userDTO) {
-    const user = await this.userModel.findOne({
-      where: userDTO,
-    });
-    return user;
-  }
-
   async login({username,password}){
     const userRecord=await this.userModel.findOne({
       where: {username},
@@ -22,9 +15,11 @@ class LoginService {
       this.logger.error("User not registered");
       throw new Error("Authentication failed");
     }
+
     this.logger.info("Checking password");
+
     if (userRecord.password === password){
-      this.logger.info("Password correct");
+      this.logger.info("Password correct, proceed and generate JWT");
 
       const user = {
         username: userRecord.username,
@@ -40,6 +35,9 @@ class LoginService {
 
       return {user,token}
     }
+
+    this.logger.error("Password verification failed");
+    throw new Error("Authentication failed");
   }
   
 

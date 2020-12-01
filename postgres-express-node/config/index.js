@@ -27,9 +27,18 @@ module.exports = {
     prefix: "/api",
   },
 
-
+//for JSON web Tokens
   jwt:{
     secret: process.env.JWT_SECRET,
     expiresIN:process.env.JWT_DURATION || "1h",
+    algorithms:["HS256"],
+    exclude:{
+      path:[
+        {
+          url:"/api/login",
+          methods:["POST"],
+        },
+      ],
+    },
   },
 };
